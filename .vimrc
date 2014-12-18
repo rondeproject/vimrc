@@ -1,5 +1,61 @@
+"-------------------------------------------------------
+" Start Neobundle Settings.
+"-------------------------------------------------------
+" bundleで管理するディレクトリを指定
+set runtimepath+=~/.vim/bundle/neobundle.vim/
+ 
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+ 
+" neobundle自体をneobundleで管理
+NeoBundleFetch 'Shougo/neobundle.vim'
+ 
+" NERDTree
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'scrooloose/nerdcommenter'
+
+" Grep
+NeoBundle 'grep.vim'
+NeoBundle 'rking/ag.vim'
+
+" vimproc
+NeoBundle 'Shougo/vimproc', { 'build' : 'make -f make_unix.mak', }
+
+" QuickRun
+NeoBundle 'thinca/vim-quickrun'
+
+" Unite
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'ujihisa/unite-colorscheme'
+
+" FuzzyFinder
+NeoBundle 'L9'
+NeoBundle 'FuzzyFinder'
+NeoBundle 'QuickBuf'
+
+" YankRing
+"NeoBundle 'YankRing.vim'
+
+" Capture
+NeoBundle 'tyru/capture.vim'
+
+call neobundle#end()
+ 
+" Required:
+filetype plugin indent on
+ 
+" 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
+" 毎回聞かれると邪魔な場合もあるので、この設定は任意です。
+NeoBundleCheck
+ 
+"-----------------------------------------------------
+" End Neobundle Settings.
+"-----------------------------------------------------
+
 " ==================== 基本の設定 ==================== "
 " 全般設定
+let mapleader=" "           " leaderをスペースに変更
 set nocompatible            " 必ず最初に書く
 set viminfo='20,<50,s10,h,! " YankRing用に!を追加
 set shellslash              " Windowsでディレクトリパスの区切り文字に / を使えるようにする
@@ -18,6 +74,7 @@ set autoindent smartindent " 自動インデント，スマートインデント
 " 入力補助
 set backspace=indent,eol,start " バックスペースでなんでも消せるように
 set formatoptions+=m           " 整形オプション，マルチバイト系を追加
+set clipboard=unnamed          " クリップボードにコピー
 
 " コマンド補完
 set wildmenu           " コマンド補完を強化
@@ -33,7 +90,7 @@ set hlsearch   " 検索文字をハイライト
 " ファイル関連
 set nobackup   " バックアップ取らない
 set autoread   " 他で書き換えられたら自動で読み直す
-"set noswapfile " スワップファイル作らない
+set noswapfile " スワップファイル作らない
 "set hidden     " 編集中でも他のファイルを開けるようにする
 
 " ヘルプファイル
@@ -51,7 +108,7 @@ set number            " 行番号表示
 set nowrap            " 画面幅で折り返す
 "set list             " 不可視文字表示
 "set listchars=tab:>  " 不可視文字の表示方法
-set notitle           " タイトル書き換えない
+"set notitle           " タイトル書き換えない
 set scrolloff=5       " 行送り
 
 " ステータスライン関連
@@ -167,7 +224,7 @@ set completeopt=menu,preview,menuone " 補完表示設定
 " ポップアップメニューの色変える
 highlight Pmenu ctermbg=lightcyan ctermfg=black 
 highlight PmenuSel ctermbg=blue ctermfg=black 
-highlight PmenuSbar ctermbg=darkgray 
+"highlight PmenuSbar ctermbg=darkgray 
 highlight PmenuThumb ctermbg=lightgray
 
 " バイナリモード
@@ -237,97 +294,80 @@ endif
 
 " ==================== プラグインの設定 ==================== "
 
-" Rails
-autocmd FileType ruby,eruby,yaml set softtabstop=2 shiftwidth=2 tabstop=2
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-let g:rails_level = 4
-
-" CakePHP
-au BufNewFile,BufRead *.thtml setfiletype php
-au BufNewFile,BufRead *.ctp setfiletype php
-
-" .vimperatorrc
-au BufNewFile,BufRead .vimperatorrc,_vimperatorrc setfiletype vimperator
-
-" Lusty Explorer
-" nmap <unique> <silent> <C-b> :BufferExplorer<CR>
-" nmap <unique> <silent> <C-e> :FilesystemExplorer<CR>
-
 " NERD_comments
+let g:NERDCreateDefaultMappings = 0
 let NERDSpaceDelims = 1
 let NERDShutUp = 1
+nmap <unique> <silent> <Space>/ <Plug>NERDCommenterToggle
+vmap <unique> <silent> <Space>/ <Plug>NERDCommenterToggle
 
 " NERD_tree
+let NERDTreeShowHidden = 1
 nmap <unique> <silent> <C-e> :NERDTreeToggle<CR>
+"autocmd VimEnter * execute 'NERDTree'
 
 " Fuzzy
-nmap <unique> <silent> <C-b> :FuzzyFinderBuffer<CR>
-nmap <unique> <silent> <C-f> :FuzzyFinderFile<CR>
-nmap <unique> <silent> <Leader>m :FuzzyFinderMruFile<CR>
-nmap <unique> <silent> <Leader>c :FuzzyFinderMruCmd<CR>
-nmap <unique> <silent> <Leader>d :FuzzyFinderDir<CR>
+"nmap <unique> <silent> <C-b> :FufBuffer<CR>
+"nmap <unique> <silent> <C-f> :FufFile<CR>
+"" nmap <unique> <silent> <leader>m :fufmrufile<cr>
+"" nmap <unique> <silent> <leader>c :fufmrucmd<cr>
+"" nmap <unique> <silent> <leader>d :fufdir<cr>
+
+" Unite
+nnoremap [unite]  <Nop>
+nmap     <Space>  [unite]
+let g:unite_enable_start_insert = 1
+let g:unite_source_history_yank_enable = 1
+" 大文字小文字を区別しない
+let g:unite_enable_ignore_case = 1
+let g:unite_enable_smart_case = 1
+" command
+nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+nnoremap <silent> [unite]f :<C-u>Unite file<CR>
+nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> [unite]F :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register<CR>
+nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
+nnoremap <silent> [unite]w :<C-u>Unite window<CR>
+nnoremap <silent> [unite]h :<C-u>Unite history/yank<CR>
+autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+autocmd FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
+autocmd FileType unite inoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
+"autocmd FileType unite nnoremap <silent> <buffer> <ESC><ESC> q
+"autocmd FileType unite inoremap <silent> <buffer> <ESC><ESC><ESC> q
+"autocmd FileType unite nnoremap <silent><buffer> <ESC> <Plug>(unite_exit)
+"autocmd FileType unite call s:unite_my_settings()
+"function! s:unite_my_settings()"{{{
+   	" " ESCでuniteを終了
+  " nnoremap <buffer> <ESC> <Plug>(unite_exit)
+"endfunction"}}}
+
+if executable('ag')
+	let g:unite_source_grep_command = 'ag'
+	let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+	let g:unite_source_grep_recursive_opt = ''
+endif
+
+" YankRing
+"nnoremap <silent> ,y :YRShow<CR>
 
 " Tab
 "nnoremap <C-t>o :tabedit<Return>
 "nnoremap <C-t>n :tabnext<Return>
-"nnoremap <C-t>N :tabnext<Return>
+"nnoremap <C-t>N :tabprev<Return>
 
 " AutoComplete
 " 330行目らへんを修正してある
 let g:AutoComplPop_IgnoreCaseOption = 0
 let g:AutoComplPop_CompleteoptPreview = 1
 
-" Project
-" let g:proj_flags = "imstg"
-" let g:proj_window_width = 30
-" nmap <silent> <Leader>p <Plug>ToggleProject
-
-" surround
-"autocmd FileType php let b:surround_45 = "<?php 
-" ?>"
-
-" php-doc
-autocmd FileType php inoremap <C-p> <ESC>:call PhpDocSingle()<CR>i
-autocmd FileType php nnoremap <C-p> :call PhpDocSingle()<CR>
-autocmd FileType php vnoremap <C-p> :call PhpDocRange()<CR>
-let g:pdv_cfg_Type = "string"
-let g:pdv_cfg_Package = ""
-let g:pdv_cfg_Version = ""
-let g:pdv_cfg_Author = "xxxx <xxxx0@gmail.com>"
-let g:pdv_cfg_Copyright = ""
-let g:pdv_cfg_License = ""
-
-" Firefoxリロード
-" 要MozRepl
-function ReloadFirefox()
-    if has('ruby')
-        :ruby <<EOF
-            require "net/telnet"
-
-            telnet = Net::Telnet.new({
-                "Host" => "localhost",
-                "Port" => 4242
-            })
-
-            telnet.puts("content.location.reload(true)")
-            telnet.close
-EOF
-    endif
-endfunction
-"nmap <silent> <Leader>r :call ReloadFirefox()<CR>
-
-" vimsh
-nmap <silent> <Leader>s :so ~/.vim/vimsh/vimsh.vim<CR>
-
-" visual studio
-if has('win32')
-    let g:visual_studio_python_exe = "C:/Python25/python.exe"
-endif
-
 " Command
 "現バッファの差分表示
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 "ファイルまたはバッファ番号を指定して差分表示。#なら裏バッファと比較
 command! -nargs=? -complete=file Diff if '<args>'=='' | browse vertical diffsplit|else| vertical diffsplit <args>|endif
+
+" カラースキームがどこかで上書きされてしまう
+colorscheme default
+
