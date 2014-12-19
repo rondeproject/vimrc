@@ -40,6 +40,9 @@ NeoBundle 'QuickBuf'
 " Capture
 NeoBundle 'tyru/capture.vim'
 
+" Gundo
+NeoBundle 'sjl/gundo.vim'
+
 call neobundle#end()
  
 " Required:
@@ -351,6 +354,9 @@ endif
 
 " YankRing
 "nnoremap <silent> ,y :YRShow<CR>
+
+" Gundo
+nnoremap <silent> <F3> :GundoToggle<CR>
 
 " Tab
 "nnoremap <C-t>o :tabedit<Return>
