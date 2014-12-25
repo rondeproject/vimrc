@@ -43,6 +43,9 @@ NeoBundle 'tyru/capture.vim'
 " Gundo
 NeoBundle 'sjl/gundo.vim'
 
+" VimCalc
+NeoBundle 'gregsexton/VimCalc'
+
 call neobundle#end()
  
 " Required:
@@ -119,7 +122,8 @@ set laststatus=2
 "set statusline=%<%F %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B) %l/%L(%P)%m
 
 " エンコーディング関連
-set ffs=unix,dos,mac " 改行文字
+"set ffs=unix,dos,mac " 改行文字
+set ffs=unix " 改行文字
 
 " 文字コードの自動認識
 " 適当な文字コード判別
