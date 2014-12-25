@@ -46,6 +46,9 @@ NeoBundle 'sjl/gundo.vim'
 " VimCalc
 NeoBundle 'gregsexton/VimCalc'
 
+" Tag
+NeoBundle "tsukkee/unite-tag"
+
 call neobundle#end()
  
 " Required:
@@ -366,6 +369,19 @@ nnoremap <silent> <F3> :GundoToggle<CR>
 "nnoremap <C-t>o :tabedit<Return>
 "nnoremap <C-t>n :tabnext<Return>
 "nnoremap <C-t>N :tabprev<Return>
+
+" Unite-tag
+"let g:unite_source_tag_max_name_length=50
+let g:unite_source_tag_max_fname_length=50
+autocmd BufEnter *
+			\   if empty(&buftype)
+			\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+			\|  endif
+autocmd BufEnter *
+			\   if empty(&buftype)
+			\|      nnoremap <buffer> <C-t> :<C-u>Unite jump<CR>
+			\|  endif
+
 
 " AutoComplete
 " 330行目らへんを修正してある
