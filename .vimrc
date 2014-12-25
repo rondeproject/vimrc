@@ -359,6 +359,11 @@ if executable('ag')
 	let g:unite_source_grep_recursive_opt = ''
 endif
 
+" QuickRun
+let quickrun_no_default_key_mappings=1
+silent! map <unique> <F7> <Plug>(quickrun)
+
+
 " YankRing
 "nnoremap <silent> ,y :YRShow<CR>
 
