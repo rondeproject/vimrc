@@ -19,7 +19,15 @@ NeoBundle 'grep.vim'
 NeoBundle 'rking/ag.vim'
 
 " vimproc
-NeoBundle 'Shougo/vimproc', { 'build' : 'make -f make_unix.mak', }
+NeoBundle 'Shougo/vimproc',
+			\ { 'build' : {
+			\ 	'cygwin' : 'make -f make_cygwin.mak',
+			\ 	'linux' : 'make -f make_unix.mak',
+			\ },
+			\}
+
+" vim--submode
+NeoBundle 'kana/vim-submode'
 
 " QuickRun
 NeoBundle 'thinca/vim-quickrun'
@@ -387,6 +395,15 @@ autocmd BufEnter *
 			\|      nnoremap <buffer> <C-t> :<C-u>Unite jump<CR>
 			\|  endif
 
+" vim-submode
+call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+call submode#map('bufmove', 'n', '', '>', '<C-w>>')
+call submode#map('bufmove', 'n', '', '<', '<C-w><')
+call submode#map('bufmove', 'n', '', '+', '<C-w>+')
+call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 
 " AutoComplete
 " 330行目らへんを修正してある
