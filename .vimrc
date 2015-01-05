@@ -139,15 +139,16 @@ set showmatch         " 括弧の対応をハイライト
 set showcmd           " 入力中のコマンドを表示
 set number            " 行番号表示
 set nowrap            " 画面幅で折り返す
-"set list             " 不可視文字表示
-"set listchars=tab:>  " 不可視文字の表示方法
+set list             " 不可視文字表示
+"set listchars=tab:>_  " 不可視文字の表示方法
+set listchars=eol:<,tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
 "set notitle           " タイトル書き換えない
 set scrolloff=5       " 行送り
 
 " ステータスライン関連
 set laststatus=2
 "set statusline=%<%F %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B) %l/%L(%P)%m
-set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[POS=%04v]\[LOW=%4l/%4L\ (%3p%%)]
+set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[ENC=%{&fileencoding}]\[[FORMAT=%{&ff}]\POS=%04v]\[LOW=%4l/%4L\ (%3p%%)]
 
 
 " エンコーディング関連
