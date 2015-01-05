@@ -141,14 +141,14 @@ set number            " 行番号表示
 set nowrap            " 画面幅で折り返す
 set list             " 不可視文字表示
 "set listchars=tab:>_  " 不可視文字の表示方法
-set listchars=eol:<,tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
+set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
 "set notitle           " タイトル書き換えない
 set scrolloff=5       " 行送り
 
 " ステータスライン関連
 set laststatus=2
 "set statusline=%<%F %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B) %l/%L(%P)%m
-set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[ENC=%{&fileencoding}]\[[FORMAT=%{&ff}]\POS=%04v]\[LOW=%4l/%4L\ (%3p%%)]
+set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[ENC=%{&fileencoding}]\[FORMAT=%{&ff}]\[POS=%04v]\[LOW=%4l/%4L\ (%3p%%)]
 
 
 " エンコーディング関連
@@ -184,9 +184,11 @@ elseif IsWindows()
 endif
 
 " 厳密な文字コード判別
+set fileencodings=utf-8,iso-2022-jp,cp932,euc-jp
 if !exists('did_encoding_settings') && has('iconv')
 	let s:enc_euc = 'euc-jp'
 	let s:enc_jis = 'iso-2022-jp'
+
 	" Does iconv support JIS X 0213?
 	if iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
 		let s:enc_euc = 'euc-jisx0213,euc-jp'
@@ -199,8 +201,8 @@ if !exists('did_encoding_settings') && has('iconv')
 		let &fileencodings .= ',' . 'ucs-2le'
 		let &fileencodings .= ',' . 'ucs-2'
 	endif
-	let &fileencodings .= ',' . s:enc_jis
 	let &fileencodings .= ',' . 'utf-8'
+	let &fileencodings .= ',' . s:enc_jis
 
 	if &encoding ==# 'utf-8'
 		let &fileencodings .= ',' . s:enc_euc
@@ -220,7 +222,6 @@ if !exists('did_encoding_settings') && has('iconv')
 
 	let did_encoding_settings = 1
 endif
-"set fileencodings=iso-2022-jp,utf-8,cp932,euc-jp
 
 " UTF-8の□や○でカーソル位置がずれないようにする
 " Terminal.appはどっちにしてもダメ，PrivatePortsのiTermでやる
