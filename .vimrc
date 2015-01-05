@@ -1,5 +1,25 @@
+" vim-tiny or vim-small は読み込まない
+if !1 | finish | endif
+
+let s:is_windows = has('win16') || has('win32') || has('win64')
+let s:is_cygwin = has('win32unix')
+let s:is_sudo = $SUDO_USER != '' && $USER !=# $SUDO_USER
+			\ && $HOME !=# expand('~'.$USER)
+			\ && $HOME ==# expand('~'.$SUDO_USER)
+
+function! IsWindows()
+	return s:is_windows
+endfunction
+
+function! IsMac()
+	return !s:is_windows && !s:is_cygwin
+				\ && (has('mac') || has('macunix') || has('gui_macvim') ||
+				\ (!executable('xdg-open') &&
+				\ system('uname') =~? '^darwin'))
+endfunction
+
 "-------------------------------------------------------
-" Start Neobundle Settings.
+" NeoBundle設定
 "-------------------------------------------------------
 " bundleで管理するディレクトリを指定
 set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -66,10 +86,6 @@ filetype plugin indent on
 " 毎回聞かれると邪魔な場合もあるので、この設定は任意です。
 NeoBundleCheck
  
-"-----------------------------------------------------
-" End Neobundle Settings.
-"-----------------------------------------------------
-
 " ==================== 基本の設定 ==================== "
 " 全般設定
 let mapleader=" "           " leaderをスペースに変更
@@ -91,7 +107,7 @@ set autoindent smartindent " 自動インデント，スマートインデント
 " 入力補助
 set backspace=indent,eol,start " バックスペースでなんでも消せるように
 set formatoptions+=m           " 整形オプション，マルチバイト系を追加
-set clipboard=unnamed          " クリップボードにコピー
+set clipboard+=unnamed          " クリップボードにコピー
 
 " コマンド補完
 set wildmenu           " コマンド補完を強化
@@ -131,6 +147,8 @@ set scrolloff=5       " 行送り
 " ステータスライン関連
 set laststatus=2
 "set statusline=%<%F %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B) %l/%L(%P)%m
+set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[POS=%04v]\[LOW=%4l/%4L\ (%3p%%)]
+
 
 " エンコーディング関連
 "set ffs=unix,dos,mac " 改行文字
@@ -138,53 +156,70 @@ set ffs=unix " 改行文字
 
 " 文字コードの自動認識
 " 適当な文字コード判別
-set termencoding=utf-8
 set encoding=utf-8
-set fileencodings=iso-2022-jp,utf-8,cp932,euc-jp
+if !has('gui_running')
+	if &term ==# 'win32' &&
+				\ (v:version < 703 || (v:version == 703 && has('patch814')))
+		" Setting when use the non-GUI Japanese console.
+
+		" Garbled unless set this.
+		set termencoding=cp932
+		" Japanese input changes itself unless set this. Be careful because
+		the
+		" automatic recognition of the character code is not possible!
+		set encoding=japan
+	else
+		if $ENV_ACCESS ==# 'linux'
+			set termencoding=euc-jp
+		elseif $ENV_ACCESS ==# 'colinux'
+			set termencoding=utf-8
+		else " fallback
+			set termencoding= " same as 'encoding'
+		endif
+	endif
+elseif IsWindows()
+	" For system.
+	set termencoding=cp932
+endif
 
 " 厳密な文字コード判別
-" http://www.kawaz.jp/pukiwiki/?vim#content_1_7
-" http://d.hatena.ne.jp/hazy-moon/20061229/1167407073
-" if &encoding !=# 'utf-8'
-    " set encoding=japan
-    " set fileencoding=japan
-" endif
-" if has('iconv')
-    " let s:enc_euc = 'euc-jp'
-    " let s:enc_jis = 'iso-2022-jp'
-    " iconvがeucJP-msに対応しているかをチェック
-    " if iconv("?x87?x64?x87?x6a", 'cp932', 'eucjp-ms') ==# "?xad?xc5?xad?xcb"
-        " let s:enc_euc = 'eucjp-ms'
-        " let s:enc_jis = 'iso-2022-jp-3'
-    " iconvがJISX0213に対応しているかをチェック
-    " elseif iconv("?x87?x64?x87?x6a", 'cp932', 'euc-jisx0213') ==# "?xad?xc5?xad?xcb"
-        " let s:enc_euc = 'euc-jisx0213'
-        " let s:enc_jis = 'iso-2022-jp-3'
-    " endif
-    " fileencodingsを構築
-    " if &encoding ==# 'utf-8'
-        " let s:fileencodings_default = &fileencodings
-        " let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
-        " let &fileencodings = &fileencodings .','. s:fileencodings_default
-        " unlet s:fileencodings_default
-    " else
-        " let &fileencodings = &fileencodings .','. s:enc_jis
-        " set fileencodings+=utf-8,ucs-2le,ucs-2
-        " if &encoding =~# '^?(euc-jp?|euc-jisx0213?|eucjp-ms?)$'
-            " set fileencodings+=cp932
-            " set fileencodings-=euc-jp
-            " set fileencodings-=euc-jisx0213
-            " set fileencodings-=eucjp-ms
-            " let &encoding = s:enc_euc
-            " let &fileencoding = s:enc_euc
-        " else
-            " let &fileencodings = &fileencodings .','. s:enc_euc
-        " endif
-    " endif
-    " 定数を処分
-    " unlet s:enc_euc
-    " unlet s:enc_jis
-" endif
+if !exists('did_encoding_settings') && has('iconv')
+	let s:enc_euc = 'euc-jp'
+	let s:enc_jis = 'iso-2022-jp'
+	" Does iconv support JIS X 0213?
+	if iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
+		let s:enc_euc = 'euc-jisx0213,euc-jp'
+		let s:enc_jis = 'iso-2022-jp-3'
+	endif
+
+	" Build encodings.
+	let &fileencodings = 'ucs-bom'
+	if &encoding !=# 'utf-8'
+		let &fileencodings .= ',' . 'ucs-2le'
+		let &fileencodings .= ',' . 'ucs-2'
+	endif
+	let &fileencodings .= ',' . s:enc_jis
+	let &fileencodings .= ',' . 'utf-8'
+
+	if &encoding ==# 'utf-8'
+		let &fileencodings .= ',' . s:enc_euc
+		let &fileencodings .= ',' . 'cp932'
+	elseif &encoding =~# '^euc-\%(jp\|jisx0213\)$'
+		let &encoding = s:enc_euc
+		let &fileencodings .= ',' . 'cp932'
+		let &fileencodings .= ',' . &encoding
+	else " cp932
+		let &fileencodings .= ',' . s:enc_euc
+		let &fileencodings .= ',' . &encoding
+	endif
+	let &fileencodings .= ',' . 'cp20932'
+
+	unlet s:enc_euc
+	unlet s:enc_jis
+
+	let did_encoding_settings = 1
+endif
+"set fileencodings=iso-2022-jp,utf-8,cp932,euc-jp
 
 " UTF-8の□や○でカーソル位置がずれないようにする
 " Terminal.appはどっちにしてもダメ，PrivatePortsのiTermでやる
