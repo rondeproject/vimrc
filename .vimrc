@@ -18,6 +18,42 @@ function! IsMac()
 				\ system('uname') =~? '^darwin'))
 endfunction
 
+function! s:SID_PREFIX()
+	return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
+function! s:strwidthpart(str, width)
+	if a:width <= 0
+		return ''
+	endif
+	let ret = a:str
+	let width = s:wcswidth(a:str)
+	while width > a:width
+		let char = matchstr(ret, '.$')
+		let ret = ret[: -1 - len(char)]
+		let width -= s:wcswidth(char)
+	endwhile
+	return ret
+endfunction
+
+function! s:wcswidth(str)
+	if a:str =~# '^[\x00-\x7f]*$'
+		return strlen(a:str)
+	end
+	let mx_first = '^\(.\)'
+	let str = a:str
+	let width = 0
+	while 1
+		let ucs = char2nr(substitute(str, mx_first, '\1', ''))
+		if ucs == 0
+			break
+		endif
+		let width += s:_wcwidth(ucs)
+		let str = substitute(str, mx_first, '', '')
+	endwhile
+	return width
+endfunction
+
 "-------------------------------------------------------
 " NeoBundle設定
 "-------------------------------------------------------
@@ -41,8 +77,8 @@ NeoBundle 'rking/ag.vim'
 " vimproc
 NeoBundle 'Shougo/vimproc',
 			\ { 'build' : {
-			\ 	'cygwin' : 'make -f make_cygwin.mak',
-			\ 	'linux' : 'make -f make_unix.mak',
+			\     'cygwin' : 'make -f make_cygwin.mak',
+			\     'linux' : 'make -f make_unix.mak',
 			\ },
 			\}
 
@@ -79,9 +115,6 @@ NeoBundle "tsukkee/unite-tag"
 
 call neobundle#end()
  
-" Required:
-filetype plugin indent on
- 
 " 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
 " 毎回聞かれると邪魔な場合もあるので、この設定は任意です。
 NeoBundleCheck
@@ -89,11 +122,10 @@ NeoBundleCheck
 " ==================== 基本の設定 ==================== "
 " 全般設定
 let mapleader=" "           " leaderをスペースに変更
-set nocompatible            " 必ず最初に書く
+"set nocompatible            " 必ず最初に書く(vimrcがある時点で不要)
 set viminfo='20,<50,s10,h,! " YankRing用に!を追加
 set shellslash              " Windowsでディレクトリパスの区切り文字に / を使えるようにする
 set lazyredraw              " マクロなどを実行中は描画を中断
-colorscheme desert          " カラースキーム
 "set mouse=a				" マウス操作
 
 " タブ周り
@@ -139,16 +171,28 @@ set showmatch         " 括弧の対応をハイライト
 set showcmd           " 入力中のコマンドを表示
 set number            " 行番号表示
 set nowrap            " 画面幅で折り返す
-set list             " 不可視文字表示
-"set listchars=tab:>_  " 不可視文字の表示方法
-set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
-"set notitle           " タイトル書き換えない
+set list              " 不可視文字表示
+set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:% " 不可視文字の表示方法
 set scrolloff=5       " 行送り
+"set notitle           " タイトル書き換えない
+set title             " タイトル変更
+set titlelen=95       " タイトルの長さ
+let &titlestring="
+			\ %{expand('%:p:~:.')}%(%m%r%w%)
+			\ %<\(%{".s:SID_PREFIX()."strwidthpart(
+			\ fnamemodify(&filetype ==# 'vimfiler' ?
+			\ substitute(b:vimfiler.current_dir, '.\\zs/$', '', '') : getcwd(), ':~'),
+			\ &columns-len(expand('%:p:.:~')))}\) - VIM"
 
 " ステータスライン関連
 set laststatus=2
 "set statusline=%<%F %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B) %l/%L(%P)%m
-set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[ENC=%{&fileencoding}]\[FORMAT=%{&ff}]\[POS=%04v]\[LOW=%4l/%4L\ (%3p%%)]
+"set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[ENC=%{&fileencoding}]\[FORMAT=%{&ff}]\[POS=%04v]\[LOW=%4l/%4L\ (%3p%%)]
+let &statusline="%{'['.winnr().'/'.winnr('$').(winnr('#')==winnr()?'#':'').']'}\ "
+			\ . "%f %m%r%h%w"
+			\ . "\%="
+			\ . "%{'['.(&filetype!='' ? &filetype.',' : '').(&fenc!='' ? &fenc : &enc).','.&ff.']'}"
+			\ . "[line %4l/%4L col %3c] (%3p%%)"
 
 
 " エンコーディング関連
@@ -201,8 +245,8 @@ if !exists('did_encoding_settings') && has('iconv')
 		let &fileencodings .= ',' . 'ucs-2le'
 		let &fileencodings .= ',' . 'ucs-2'
 	endif
-	let &fileencodings .= ',' . 'utf-8'
 	let &fileencodings .= ',' . s:enc_jis
+	let &fileencodings .= ',' . 'utf-8'
 
 	if &encoding ==# 'utf-8'
 		let &fileencodings .= ',' . s:enc_euc
@@ -234,7 +278,8 @@ set ambiwidth=double
 " で、設定名と現在の色は
 " :highlight
 
-syntax on " シンタックスカラーリングオン
+syntax on             " シンタックスカラーリングオン
+colorscheme default   " defaultカラースキーム
 
 " diff option
 set diffopt+=vertical
@@ -496,7 +541,4 @@ let g:AutoComplPop_CompleteoptPreview = 1
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 "ファイルまたはバッファ番号を指定して差分表示。#なら裏バッファと比較
 command! -nargs=? -complete=file Diff if '<args>'=='' | browse vertical diffsplit|else| vertical diffsplit <args>|endif
-
-" カラースキームがどこかで上書きされてしまう
-colorscheme default
 
