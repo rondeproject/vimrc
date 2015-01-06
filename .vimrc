@@ -122,11 +122,13 @@ NeoBundleCheck
 " ==================== 基本の設定 ==================== "
 " 全般設定
 let mapleader=" "           " leaderをスペースに変更
-"set nocompatible            " 必ず最初に書く(vimrcがある時点で不要)
-set viminfo='20,<50,s10,h,! " YankRing用に!を追加
+set viminfo='100,<50,s10,h,! " YankRing用に!を追加
 set shellslash              " Windowsでディレクトリパスの区切り文字に / を使えるようにする
 set lazyredraw              " マクロなどを実行中は描画を中断
-"set mouse=a				" マウス操作
+set mouse=a                 " マウス操作
+set cursorline              " カーソルライン
+set t_Co=256                " 256色
+
 
 " タブ周り
 " tabstopはTab文字を画面上で何文字分に展開するか
@@ -139,7 +141,7 @@ set autoindent smartindent " 自動インデント，スマートインデント
 " 入力補助
 set backspace=indent,eol,start " バックスペースでなんでも消せるように
 set formatoptions+=m           " 整形オプション，マルチバイト系を追加
-set clipboard+=unnamed          " クリップボードにコピー
+set clipboard^=unnamed         " クリップボードにコピー
 
 " コマンド補完
 set wildmenu           " コマンド補完を強化
@@ -159,11 +161,10 @@ set noswapfile " スワップファイル作らない
 "set hidden     " 編集中でも他のファイルを開けるようにする
 
 " ヘルプファイル
-if has('mac')
-    helptags ~/.vim/doc/
-endif
-if has('win32')
+if IsWindows()
     helptags ~/vimfiles/doc/
+else
+    helptags ~/.vim/doc/
 endif
 
 "表示関連
@@ -194,7 +195,6 @@ let &statusline="%{'['.winnr().'/'.winnr('$').(winnr('#')==winnr()?'#':'').']'}\
 			\ . "%{'['.(&filetype!='' ? &filetype.',' : '').(&fenc!='' ? &fenc : &enc).','.&ff.']'}"
 			\ . "[line %4l/%4L col %3c] (%3p%%)"
 
-
 " エンコーディング関連
 "set ffs=unix,dos,mac " 改行文字
 set ffs=unix " 改行文字
@@ -209,8 +209,7 @@ if !has('gui_running')
 
 		" Garbled unless set this.
 		set termencoding=cp932
-		" Japanese input changes itself unless set this. Be careful because
-		the
+		" Japanese input changes itself unless set this. Be careful because the
 		" automatic recognition of the character code is not possible!
 		set encoding=japan
 	else
@@ -280,6 +279,10 @@ set ambiwidth=double
 
 syntax on             " シンタックスカラーリングオン
 colorscheme default   " defaultカラースキーム
+highlight ShowMarksHLl ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
+highlight ShowMarksHLu ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
+highlight ShowMarksHLo ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
+highlight ShowMarksHLm ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
 
 " diff option
 set diffopt+=vertical
@@ -322,9 +325,9 @@ set completeopt=menu,preview,menuone " 補完表示設定
 "inoremap <CR> <C-r>=InsertCrWrapper()<CR>
 
 " ポップアップメニューの色変える
-highlight Pmenu ctermbg=lightcyan ctermfg=black 
-highlight PmenuSel ctermbg=blue ctermfg=black 
-"highlight PmenuSbar ctermbg=darkgray 
+highlight Pmenu ctermbg=lightgray ctermfg=black
+highlight PmenuSel ctermbg=lightblue ctermfg=black
+highlight PmenuSbar ctermbg=darkgray
 highlight PmenuThumb ctermbg=lightgray
 
 " バイナリモード
@@ -341,10 +344,10 @@ highlight PmenuThumb ctermbg=lightgray
 " augroup END
 
 " vimdiff の設定
-hi DiffAdd    ctermfg=black ctermbg=2
-hi DiffChange ctermfg=black ctermbg=3
-hi DiffDelete ctermfg=black ctermbg=6
-hi DiffText   ctermfg=black ctermbg=7
+highlight DiffAdd    ctermfg=black ctermbg=2
+highlight DiffChange ctermfg=black ctermbg=3
+highlight DiffDelete ctermfg=black ctermbg=6
+highlight DiffText   ctermfg=black ctermbg=7
 
 " Migemo
 if has('migemo')
@@ -367,7 +370,7 @@ vnoremap j gj
 vnoremap k gk
 
 " ハイライト消す
-nmap <silent> gh :nohlsearch<CR>
+nmap <silent> <ESC><ESC> :nohlsearch<CR>
 
 " コピペ
 " Macの場合は普通にComamnd-C，Command-Vも使えたりする
@@ -500,13 +503,13 @@ for n in range(1, 9)
 endfor
 " t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
 
-map <silent> [Tag]c :tablast <bar> tabnew<CR>
+map <silent> [Tag]n :tablast <bar> tabnew<CR>
 " tc 新しいタブを一番右に作る
-map <silent> [Tag]x :tabclose<CR>
+map <silent> [Tag]w :tabclose<CR>
 " tx タブを閉じる
-map <silent> [Tag]n :tabnext<CR>
+map <silent> [Tag]t :tabnext<CR>
 " tn 次のタブ
-map <silent> [Tag]p :tabprevious<CR>
+map <silent> [Tag]T :tabprevious<CR>
 " tp 前のタブ
 
 " Unite-tag
@@ -538,7 +541,7 @@ let g:AutoComplPop_CompleteoptPreview = 1
 
 " Command
 "現バッファの差分表示
-command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+command! DiffOrig vert new | set bt=nofile | r # | -1d_ | diffthis | wincmd p | diffthis
 "ファイルまたはバッファ番号を指定して差分表示。#なら裏バッファと比較
 command! -nargs=? -complete=file Diff if '<args>'=='' | browse vertical diffsplit|else| vertical diffsplit <args>|endif
 
