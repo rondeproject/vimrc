@@ -278,7 +278,11 @@ set ambiwidth=double
 " :highlight
 
 syntax on             " シンタックスカラーリングオン
-colorscheme default   " defaultカラースキーム
+if s:is_windows || s:is_cygwin
+	colorscheme desert    " 背景黒用カラースキーム
+else
+	colorscheme default   " 背景白用カラースキーム
+endif
 highlight ShowMarksHLl ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
 highlight ShowMarksHLu ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
 highlight ShowMarksHLo ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
