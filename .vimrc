@@ -507,7 +507,7 @@ for n in range(1, 9)
 endfor
 " t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
 
-map <silent> [Tag]n :tablast <bar> tabnew<CR>
+map <silent> [Tag]c :tablast <bar> tabnew<CR>
 " tc 新しいタブを一番右に作る
 map <silent> [Tag]w :tabclose<CR>
 " tx タブを閉じる
@@ -529,14 +529,16 @@ autocmd BufEnter *
 			\|  endif
 
 " vim-submode
-call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
-call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
-call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
-call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
-call submode#map('bufmove', 'n', '', '>', '<C-w>>')
-call submode#map('bufmove', 'n', '', '<', '<C-w><')
-call submode#map('bufmove', 'n', '', '+', '<C-w>+')
-call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+call submode#enter_with('resizewin', 'n', '', '<C-w>>', '<C-w>>')
+call submode#enter_with('resizewin', 'n', '', '<C-w><', '<C-w><')
+call submode#enter_with('resizewin', 'n', '', '<C-w>+', '<C-w>+')
+call submode#enter_with('resizewin', 'n', '', '<C-w>-', '<C-w>-')
+call submode#map('resizewin', 'n', '', '>', '<C-w>>')
+call submode#map('resizewin', 'n', '', '<', '<C-w><')
+call submode#map('resizewin', 'n', '', '+', '<C-w>+')
+call submode#map('resizewin', 'n', '', '-', '<C-w>-')
+nnoremap <silent> <Tab>    <C-w>w
+nnoremap <silent> <S-Tab>  <C-w>W
 
 " AutoComplete
 " 330行目らへんを修正してある
