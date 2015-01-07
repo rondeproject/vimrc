@@ -294,10 +294,6 @@ highlight ShowMarksHLm ctermfg=black ctermbg=white cterm=bold guifg=black guibg=
 " diff option
 set diffopt+=vertical
 
-" なぜか動かない
-" highlight ZenkakuSpace ctermbg=6 guibg=white
-" match ZenkakuSpace /s+$|　/
-
 set complete+=k    " 補完に辞書ファイル追加
 filetype indent on " ファイルタイプによるインデントを行う
 filetype plugin on " ファイルタイプごとのプラグインを使う
@@ -337,37 +333,11 @@ highlight PmenuSel ctermbg=lightblue ctermfg=black
 highlight PmenuSbar ctermbg=darkgray
 highlight PmenuThumb ctermbg=lightgray
 
-" バイナリモード
-" bviとかHexEditor.appの方が楽
-" vim -b : edit binary using xxd-format!
-" augroup BinaryXXD
-  " autocmd!
-  " autocmd BufReadPre *.bin,*.swf let &binary =1
-  " autocmd BufReadPost * if &binary | silent %!xxd -g 1
-  " autocmd BufReadPost * set ft=xxd | endif
-  " autocmd BufWritePre * if &binary | %!xxd -r | endif
-  " autocmd BufWritePost * if &binary | silent %!xxd -g 1
-  " autocmd BufWritePost * set nomod | endif
-" augroup END
-
 " vimdiff の設定
 highlight DiffAdd    ctermfg=black ctermbg=2
 highlight DiffChange ctermfg=black ctermbg=3
 highlight DiffDelete ctermfg=black ctermbg=6
 highlight DiffText   ctermfg=black ctermbg=7
-
-" Migemo
-if has('migemo')
-    set migemo
-    set migemodict=/opt/local/share/migemo/utf-8/migemo-dict
-endif
-
-" Kaoriya
-if has('kaoriya')
-    " imを無効にする
-    set iminsert=0
-    set imsearch=0
-endif
 
 " ==================== キーマップ ==================== "
 " 表示行単位で移動
@@ -416,13 +386,6 @@ let NERDTreeShowHidden = 1
 nmap <unique> <silent> <C-e> :NERDTreeToggle<CR>
 "autocmd VimEnter * execute 'NERDTree'
 
-" Fuzzy
-"nmap <unique> <silent> <C-b> :FufBuffer<CR>
-"nmap <unique> <silent> <C-f> :FufFile<CR>
-"" nmap <unique> <silent> <leader>m :fufmrufile<cr>
-"" nmap <unique> <silent> <leader>c :fufmrucmd<cr>
-"" nmap <unique> <silent> <leader>d :fufdir<cr>
-
 " Unite
 nnoremap [unite]  <Nop>
 nmap     <Space>  [unite]
@@ -444,15 +407,8 @@ autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('
 autocmd FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
 autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
 autocmd FileType unite inoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
-"autocmd FileType unite nnoremap <silent> <buffer> <ESC><ESC> q
-"autocmd FileType unite inoremap <silent> <buffer> <ESC><ESC><ESC> q
-"autocmd FileType unite nnoremap <silent><buffer> <ESC> <Plug>(unite_exit)
-"autocmd FileType unite call s:unite_my_settings()
-"function! s:unite_my_settings()"{{{
-   	" " ESCでuniteを終了
-  " nnoremap <buffer> <ESC> <Plug>(unite_exit)
-"endfunction"}}}
 
+" grep
 if executable('ag')
 	let g:unite_source_grep_command = 'ag'
 	let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
@@ -463,7 +419,6 @@ endif
 let quickrun_no_default_key_mappings=1
 silent! map <unique> <F7> <Plug>(quickrun)
 
-
 " YankRing
 "nnoremap <silent> ,y :YRShow<CR>
 
@@ -471,53 +426,44 @@ silent! map <unique> <F7> <Plug>(quickrun)
 nnoremap <silent> <F3> :GundoToggle<CR>
 
 " Tab
-"nnoremap <C-t>o :tabedit<Return>
-"nnoremap <C-t>n :tabnext<Return>
-"nnoremap <C-t>N :tabprev<Return>
-" Anywhere SID.
 function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+	return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
 
-" Set tabline.
 function! s:my_tabline()  "{{{
-  let s = ''
-  for i in range(1, tabpagenr('$'))
-    let bufnrs = tabpagebuflist(i)
-    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
-    let no = i  " display 0-origin tabpagenr.
-    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
-    let title = fnamemodify(bufname(bufnr), ':t')
-    let title = '[' . title . ']'
-    let s .= '%'.i.'T'
-    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-    let s .= no . ':' . title
-    let s .= mod
-    let s .= '%#TabLineFill# '
-  endfor
-  let s .= '%#TabLineFill#%T%=%#TabLine#'
-  return s
+	let s = ''
+	for i in range(1, tabpagenr('$'))
+		let bufnrs = tabpagebuflist(i)
+		let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
+		let no = i  " display 0-origin tabpagenr.
+		let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
+		let title = fnamemodify(bufname(bufnr), ':t')
+		let title = '[' . title . ']'
+		let s .= '%'.i.'T'
+		let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+		let s .= no . ':' . title
+		let s .= mod
+		let s .= '%#TabLineFill# '
+	endfor
+	let s .= '%#TabLineFill#%T%=%#TabLine#'
+	return s
 endfunction "}}}
 let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
 set showtabline=2 " 常にタブラインを表示
 
 " The prefix key.
 nnoremap    [Tag]   <Nop>
-nmap    t [Tag]
+nmap        t       [Tag]
 " Tab jump
 for n in range(1, 9)
-  execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
+	execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
 endfor
 " t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
 
 map <silent> [Tag]c :tablast <bar> tabnew<CR>
-" tc 新しいタブを一番右に作る
 map <silent> [Tag]w :tabclose<CR>
-" tx タブを閉じる
 map <silent> [Tag]t :tabnext<CR>
-" tn 次のタブ
 map <silent> [Tag]T :tabprevious<CR>
-" tp 前のタブ
 
 " Unite-tag
 "let g:unite_source_tag_max_name_length=50
