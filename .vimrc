@@ -113,6 +113,10 @@ NeoBundle 'gregsexton/VimCalc'
 " Tag
 NeoBundle "tsukkee/unite-tag"
 
+" ColorScheme
+NeoBundle "w0ng/vim-hybrid"
+NeoBundle "nanotech/jellybeans.vim"
+
 call neobundle#end()
  
 " 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
@@ -175,15 +179,18 @@ set nowrap            " 画面幅で折り返す
 set list              " 不可視文字表示
 set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:% " 不可視文字の表示方法
 set scrolloff=5       " 行送り
-"set notitle           " タイトル書き換えない
-set title             " タイトル変更
-set titlelen=95       " タイトルの長さ
-let &titlestring="
-			\ %{expand('%:p:~:.')}%(%m%r%w%)
-			\ %<\(%{".s:SID_PREFIX()."strwidthpart(
-			\ fnamemodify(&filetype ==# 'vimfiler' ?
-			\ substitute(b:vimfiler.current_dir, '.\\zs/$', '', '') : getcwd(), ':~'),
-			\ &columns-len(expand('%:p:.:~')))}\) - VIM"
+if s:is_cygwin            " Cygwin環境だとタイトルが変になる
+	set notitle           " タイトル書き換えない
+else
+	set title             " タイトル変更
+	set titlelen=95       " タイトルの長さ
+	let &titlestring="
+				\ %{expand('%:p:~:.')}%(%m%r%w%)
+				\ %<\(%{".s:SID_PREFIX()."strwidthpart(
+				\ fnamemodify(&filetype ==# 'vimfiler' ?
+				\ substitute(b:vimfiler.current_dir, '.\\zs/$', '', '') : getcwd(), ':~'),
+				\ &columns-len(expand('%:p:.:~')))}\) - VIM"
+endif
 
 " ステータスライン関連
 set laststatus=2
@@ -279,7 +286,8 @@ set ambiwidth=double
 
 syntax on             " シンタックスカラーリングオン
 if s:is_windows || s:is_cygwin
-	colorscheme desert    " 背景黒用カラースキーム
+	let g:hybrid_use_Xresources = 1
+	colorscheme hybrid    " 背景黒用カラースキーム
 else
 	colorscheme default   " 背景白用カラースキーム
 endif
