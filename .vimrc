@@ -177,7 +177,7 @@ set showcmd           " 入力中のコマンドを表示
 set number            " 行番号表示
 set nowrap            " 画面幅で折り返す
 set list              " 不可視文字表示
-set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:% " 不可視文字の表示方法
+set listchars=tab:>\ ,trail:-,extends:»,precedes:«,nbsp:% " 不可視文字の表示方法
 set scrolloff=5       " 行送り
 if s:is_cygwin            " Cygwin環境だとタイトルが変になる
 	set notitle           " タイトル書き換えない
@@ -285,12 +285,7 @@ set ambiwidth=double
 " :highlight
 
 syntax on             " シンタックスカラーリングオン
-if s:is_windows || s:is_cygwin
-	let g:hybrid_use_Xresources = 1
-	colorscheme hybrid    " 背景黒用カラースキーム
-else
-	colorscheme default   " 背景白用カラースキーム
-endif
+colorscheme default   " 背景白用カラースキーム
 highlight ShowMarksHLl ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
 highlight ShowMarksHLu ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
 highlight ShowMarksHLo ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
