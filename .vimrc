@@ -93,6 +93,9 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'ujihisa/unite-colorscheme'
 
+" Filer
+NeoBundle 'Shougo/vimfiler'
+
 " FuzzyFinder
 NeoBundle 'L9'
 NeoBundle 'FuzzyFinder'
