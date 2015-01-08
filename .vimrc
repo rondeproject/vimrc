@@ -129,7 +129,7 @@ let mapleader=" "           " leaderをスペースに変更
 set viminfo='100,<50,s10,h,! " YankRing用に!を追加
 set shellslash              " Windowsでディレクトリパスの区切り文字に / を使えるようにする
 set lazyredraw              " マクロなどを実行中は描画を中断
-set mouse=a                 " マウス操作
+"set mouse=a                 " マウス操作
 set cursorline              " カーソルライン
 set t_Co=256                " 256色
 
@@ -192,6 +192,26 @@ else
 				\ &columns-len(expand('%:p:.:~')))}\) - VIM"
 endif
 
+function! s:getEncodeFormat(enc)
+	" if a:enc ==# 'utf-8'
+		" return "UTF-8"
+	" endif
+	" if a:enc ==# 'cp20932'
+		" return "EUC"
+	" endif
+	" if a:enc ==# 'euc-jp' || a:enc ==# 'euc-jisx0213'
+		" return "EUC-JP"
+	" endif
+	" if a:enc ==# 'cp932'
+		" return "SJIS"
+	" endif
+	" if a:enc =~# 'iso-2022-jp*'
+		" return "JIS"
+	" endif
+
+	return a:enc
+endfunction
+
 " ステータスライン関連
 set laststatus=2
 "set statusline=%<%F %r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%4v(ASCII=%03.3b,HEX=%02.2B) %l/%L(%P)%m
@@ -199,12 +219,12 @@ set laststatus=2
 let &statusline="%{'['.winnr().'/'.winnr('$').(winnr('#')==winnr()?'#':'').']'}\ "
 			\ . "%f %m%r%h%w"
 			\ . "\%="
-			\ . "%{'['.(&filetype!='' ? &filetype.',' : '').(&fenc!='' ? &fenc : &enc).','.&ff.']'}"
+			\ . "["."%{(&filetype!='' ? &filetype.', ' : '')}".s:getEncodeFormat(&fenc!='' ? &fenc : &enc).", "."%{&ff}".']'
 			\ . "[line %4l/%4L col %3c] (%3p%%)"
 
 " エンコーディング関連
-"set ffs=unix,dos,mac " 改行文字
-set ffs=unix " 改行文字
+set ffs=unix,dos,mac " 改行文字
+"set ffs=unix " 改行文字
 
 " 文字コードの自動認識
 " 適当な文字コード判別
