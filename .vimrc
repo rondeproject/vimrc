@@ -319,6 +319,8 @@ highlight ShowMarksHLl ctermfg=black ctermbg=white cterm=bold guifg=black guibg=
 highlight ShowMarksHLu ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
 highlight ShowMarksHLo ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
 highlight ShowMarksHLm ctermfg=black ctermbg=white cterm=bold guifg=black guibg=white gui=bold " ShowMarks用の色設定
+highlight StatusLine   ctermfg=darkblue ctermbg=white term=bold,reverse cterm=bold,reverse gui=bold,reverse
+highlight TabLineSel   ctermfg=darkblue ctermbg=white term=bold cterm=bold gui=bold
 
 " diff option
 set diffopt+=vertical
