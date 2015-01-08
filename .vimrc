@@ -446,10 +446,6 @@ silent! map <unique> <F7> <Plug>(quickrun)
 nnoremap <silent> <F3> :GundoToggle<CR>
 
 " Tab
-function! s:SID_PREFIX()
-	return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
-
 function! s:my_tabline()  "{{{
 	let s = ''
 	for i in range(1, tabpagenr('$'))
