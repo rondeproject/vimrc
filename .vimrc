@@ -113,6 +113,12 @@ NeoBundle 'gregsexton/VimCalc'
 " Tag
 NeoBundle "tsukkee/unite-tag"
 
+" SVN
+NeoBundle "kmnk/vim-unite-svn"
+
+" GIT
+NeoBundle 'kmnk/vim-unite-giti.git'
+
 " ColorScheme
 NeoBundle "w0ng/vim-hybrid"
 NeoBundle "nanotech/jellybeans.vim"
