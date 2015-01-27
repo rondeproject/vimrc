@@ -228,7 +228,7 @@ set laststatus=2
 let &statusline="%{'['.winnr().'/'.winnr('$').(winnr('#')==winnr()?'#':'').']'}\ "
 			\ . "%f %m%r%h%w"
 			\ . "\%="
-			\ . "["."%{(&filetype!='' ? &filetype.', ' : '')}".s:getEncodeFormat(&fenc!='' ? &fenc : &enc).", "."%{&ff}".']'
+			\ . "["."%{(&filetype!='' ? &filetype.', ' : '')}".s:getEncodeFormat("%{&fenc}"!='' ? "%{&fenc}" : "%{&enc}").", "."%{&ff}".']'
 			\ . "[line %4l/%4L col %3c] (%3p%%)"
 
 " エンコーディング関連
