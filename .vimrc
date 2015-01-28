@@ -186,7 +186,8 @@ set showcmd           " 入力中のコマンドを表示
 set number            " 行番号表示
 set nowrap            " 画面幅で折り返す
 set list              " 不可視文字表示
-set listchars=tab:>\ ,trail:-,extends:»,precedes:«,nbsp:% " 不可視文字の表示方法
+"set listchars=tab:>\ ,trail:-,extends:»,precedes:«,nbsp:% " 不可視文字の表示方法
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:% " 不可視文字の表示方法
 set scrolloff=5       " 行送り
 if s:is_cygwin            " Cygwin環境だとタイトルが変になる
 	set notitle           " タイトル書き換えない
@@ -414,7 +415,8 @@ vmap <unique> <silent> <Space>/ <Plug>NERDCommenterToggle
 
 " NERD_tree
 let NERDTreeShowHidden = 1
-nmap <unique> <silent> <C-e> :NERDTreeToggle<CR>
+"nmap <unique> <silent> <C-e> :NERDTreeToggle<CR>
+nmap <unique> <silent> <C-e> :VimFilerExplorer<CR>
 "autocmd VimEnter * execute 'NERDTree'
 
 " Unite
@@ -438,6 +440,17 @@ autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('
 autocmd FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
 autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
 autocmd FileType unite inoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
+
+" VimFiler
+augroup vimfiler
+	autocmd!
+	" オープンは、<CR>(enter キー)
+	autocmd FileType vimfiler nmap <buffer><expr> <CR>
+				\ vimfiler#smart_cursor_map("\<Plug>(vimfiler_smart_l)", "\<Plug>(vimfiler_edit_file)")
+	" 親ディレクトリ移動
+	autocmd FileType vimfiler nmap <buffer><expr> <BS>
+				\ '<Plug>(vimfiler_smart_h)'
+augroup END
 
 " grep
 if executable('ag')
