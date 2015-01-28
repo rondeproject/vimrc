@@ -414,9 +414,8 @@ nmap <unique> <silent> <Space>/ <Plug>NERDCommenterToggle
 vmap <unique> <silent> <Space>/ <Plug>NERDCommenterToggle
 
 " NERD_tree
-let NERDTreeShowHidden = 1
+"let NERDTreeShowHidden = 1
 "nmap <unique> <silent> <C-e> :NERDTreeToggle<CR>
-nmap <unique> <silent> <C-e> :VimFilerExplorer<CR>
 "autocmd VimEnter * execute 'NERDTree'
 
 " Unite
@@ -442,6 +441,8 @@ autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-k> unite#do_action('
 autocmd FileType unite inoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
 
 " VimFiler
+let g:vimfiler_as_default_explorer = 1
+nmap <unique> <silent> <C-e> :VimFilerExplorer<CR>
 augroup vimfiler
 	autocmd!
 	" オープンは、<CR>(enter キー)
