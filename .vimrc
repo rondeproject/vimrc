@@ -379,7 +379,7 @@ vnoremap j gj
 vnoremap k gk
 
 " ハイライト消す
-nmap <silent> <ESC><ESC> :nohlsearch<CR>
+"nmap <silent> <ESC><ESC> :nohlsearch<CR>
 
 " コピペ
 " Macの場合は普通にComamnd-C，Command-Vも使えたりする
