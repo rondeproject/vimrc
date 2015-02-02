@@ -442,6 +442,7 @@ autocmd FileType unite inoremap <silent> <buffer> <expr> <C-k> unite#do_action('
 
 " VimFiler
 let g:vimfiler_as_default_explorer = 1
+let vimfiler_force_overwrite_statusline = 0
 nmap <unique> <silent> <C-e> :VimFilerExplorer<CR>
 augroup vimfiler
 	autocmd!
