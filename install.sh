@@ -10,12 +10,6 @@ if [ ! -d $VIM_DIR ]; then
 	exit
 fi
 
-# NeoBundleのインストール
-if [ ! -d $VIM_DIR/bundle/neobundle.vim ]; then
-	mkdir -p $VIM_DIR/bundle
-	git clone https://github.com/Shougo/neobundle.vim $VIM_DIR/bundle/neobundle.vim
-fi
-
 # .vimrcをリンク
 if [ -f $VIM_DIR/.vimrc -a ! -f $VIM_FILE ]; then
 	ln -s $VIM_DIR/.vimrc $VIM_FILE
