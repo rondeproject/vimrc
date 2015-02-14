@@ -1,17 +1,16 @@
 #!/bin/bash
 
+# .vimディレクトリがない場合はエラー
 if [ ! -d $HOME/.vim ]; then
 	echo "not found .vim"
 	echo "git clone http://github.com/rondeproject/vimrc.git $HOME/.vim"
 	exit
 fi
 
-# NeoBundle用ディレクトリ作成
-mkdir -p ~.vim/bundle
-
 # NeoBundleのインストール
-if [ ! -d ~/.vim/bundle/neobundle.vim ]; then
-	git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+if [ ! -d $HOME/.vim/bundle/neobundle.vim ]; then
+	mkdir -p $HOME/.vim/bundle
+	git clone https://github.com/Shougo/neobundle.vim $HOME/.vim/bundle/neobundle.vim
 fi
 
 # .vimrcをリンク
