@@ -77,17 +77,11 @@ set showtabline=2
 " Set statusline.
 let &statusline="%{'['.winnr().'/'.winnr('$')"
       \ . ".(winnr('#')==winnr()?'#':'').']'}\ "
-      \ . "%{(&previewwindow?'[preview] ':'').expand('%:t')}"
+      \ . "%f %m%r%h%w"
       \ . "\ %=%{(winnr('$')==1 || winnr('#')!=winnr()) ?
       \ '['.(&filetype!=''?&filetype.',':'')"
       \ . ".(&fenc!=''?&fenc:&enc).','.&ff.']' : ''}"
-      \ . "%m%{printf('%'.(len(line('$'))+2).'d/%d',line('.'),line('$'))}"
-"let &statusline="%{'['.winnr().'/'.winnr('$').(winnr('#')==winnr()?'#':'').']'}\ "
-"			\ . "%f %m%r%h%w"
-"			\ . "\%="
-"			\ . "["."%{(&filetype!='' ? &filetype.', ' : '')}".s:getEncodeFormat("%{&fenc}"!='' ? "%{&fenc}" : "%{&enc}").", "."%{&ff}".']'
-"			\ . "[line %4l/%4L col %3c] (%3p%%)"
-
+      \ . "[%4l/%4L,%3c] (%3p%%)"
 
 " Turn down a long line appointed in 'breakat'
 "set linebreak
@@ -96,8 +90,9 @@ let &statusline="%{'['.winnr().'/'.winnr('$')"
 " Wrap conditions.
 "set whichwrap+=h,l,<,>,[,],b,s,~
 if exists('+breakindent')
-  set breakindent
-  set wrap
+"  set breakindent
+"  set wrap
+  set nowrap
 else
   set nowrap
 endif
@@ -218,18 +213,18 @@ function! s:strwidthpart(str, width) "{{{
   return ret
 endfunction"}}}
 
-"if v:version >= 703
-"  " For conceal.
-"  set conceallevel=2 concealcursor=niv
-"
+if v:version >= 703
+  " For conceal.
+  set conceallevel=2 concealcursor=niv
+
 "  set colorcolumn=79
-"
-"  " Use builtin function.
-"  function! s:wcswidth(str)
-"    return strwidth(a:str)
-"  endfunction
-"  finish
-"endif
+
+  " Use builtin function.
+  function! s:wcswidth(str)
+    return strwidth(a:str)
+  endfunction
+  finish
+endif
 
 function! s:wcswidth(str)
   if a:str =~# '^[\x00-\x7f]*$'
