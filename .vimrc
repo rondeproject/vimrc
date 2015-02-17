@@ -115,10 +115,3 @@ call s:source_rc('syntax.rc.vim')
 " Plugin:
 call s:source_rc('plugin.rc.vim')
 
-""---------------------------------------------------------------------------
-" Command:
-"現バッファの差分表示
-command! DiffOrig vert new | setlocal bt=nofile | r # | 0d__ | diffthis | wincmd p | diffthis
-"ファイルまたはバッファ番号を指定して差分表示。#なら裏バッファと比較
-command! -nargs=? -complete=file Diff if '<args>'=='' | browse vertical diffsplit|else| vertical diffsplit <args>|endif
-
