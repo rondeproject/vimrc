@@ -91,22 +91,6 @@ endif "}}}
 
 
 "" =========================================================================
-" The prefix key.
-nnoremap    [Tag]   <Nop>
-nmap        t       [Tag]
-" Tab jump
-for n in range(1, 9)
-	execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
-endfor
-" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
-
-map <silent> [Tag]c :tablast <bar> tabnew<CR>
-map <silent> [Tag]w :tabclose<CR>
-map <silent> [Tag]t :tabnext<CR>
-map <silent> [Tag]T :tabprevious<CR>
-
-
-"" =========================================================================
 " Unite-tag:
 if neobundle#tap("unite-tag") "{{{
 "	let g:unite_source_tag_max_name_length=50
@@ -150,4 +134,9 @@ endif "}}}
 " 330行目らへんを修正してある
 let g:AutoComplPop_IgnoreCaseOption = 0
 let g:AutoComplPop_CompleteoptPreview = 1
+
+"" =========================================================================
+" Other:
+" 日本語ヘルプが有効にならない
+helptags ~/.cache/bundle/vimdoc-ja/doc/
 

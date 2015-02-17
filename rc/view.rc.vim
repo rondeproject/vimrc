@@ -89,13 +89,13 @@ let &statusline="%{'['.winnr().'/'.winnr('$')"
 "set breakat=\ \	;:,!?
 " Wrap conditions.
 "set whichwrap+=h,l,<,>,[,],b,s,~
-if exists('+breakindent')
+"if exists('+breakindent')
 "  set breakindent
 "  set wrap
-  set nowrap
-else
-  set nowrap
-endif
+"else
+"  set nowrap
+"endif
+set nowrap
 
 " Do not display greetings message at the time of Vim start.
 set shortmess=aTI
@@ -160,7 +160,7 @@ set nostartofline
 " Splitting a window will put the new window below the current one.
 "set splitbelow
 " Splitting a window will put the new window right the current one.
-set splitright
+"set splitright
 " Set minimal width for current window.
 "set winwidth=30
 " Set minimal height for current window.
