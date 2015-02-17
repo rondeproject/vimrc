@@ -135,8 +135,17 @@ endif "}}}
 let g:AutoComplPop_IgnoreCaseOption = 0
 let g:AutoComplPop_CompleteoptPreview = 1
 
+
+""---------------------------------------------------------------------------
+" Command:
+"現バッファの差分表示
+command! DiffOrig vert new | setlocal bt=nofile | r # | 0d__ | diffthis | wincmd p | diffthis
+"ファイルまたはバッファ番号を指定して差分表示。#なら裏バッファと比較
+command! -nargs=? -complete=file Diff if '<args>'=='' | browse vertical diffsplit|else| vertical diffsplit <args>|endif
+
+
 "" =========================================================================
 " Other:
 " 日本語ヘルプが有効にならない
-helptags ~/.cache/bundle/vimdoc-ja/doc/
+helptags $CACHE/bundle/vimdoc-ja/doc/
 
