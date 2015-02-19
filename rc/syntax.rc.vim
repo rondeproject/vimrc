@@ -27,3 +27,7 @@ highlight DiffChange ctermfg=black ctermbg=3
 highlight DiffDelete ctermfg=black ctermbg=6
 highlight DiffText   ctermfg=black ctermbg=7
 
+" 自動で判断できない拡張子
+autocmd MyAutoCmd BufRead,BufNewFile makefile.inc set filetype=make
+autocmd MyAutoCmd BufRead,BufNewFile Makefile.inc set filetype=make
+
