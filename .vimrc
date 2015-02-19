@@ -84,6 +84,9 @@ NeoBundle "nanotech/jellybeans.vim"
 " ShowMarks
 NeoBundle "ShowMarks"
 
+" BlockDiff
+NeoBundle "BlockDiff"
+
 call neobundle#end()
  
 " 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
