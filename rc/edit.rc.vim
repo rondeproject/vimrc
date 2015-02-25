@@ -34,7 +34,7 @@ endif
 set backspace=indent,eol,start
 
 " Highlight parenthesis.
-"set showmatch
+set showmatch
 " Highlight when CursorMoved.
 "set cpoptions-=m
 "set matchtime=1

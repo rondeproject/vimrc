@@ -63,7 +63,7 @@ function! s:my_tabline()  "{{{
 
     let s .= '%'.i.'T'
     let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
-    let s .= title
+    let s .= no . ':' . title
     let s .= mod
     let s .= '%#TabLineFill#'
   endfor
@@ -75,13 +75,24 @@ let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
 set showtabline=2
 
 " Set statusline.
-let &statusline="%{'['.winnr().'/'.winnr('$')"
-      \ . ".(winnr('#')==winnr()?'#':'').']'}\ "
-      \ . "%f %m%r%h%w"
-      \ . "\ %=%{(winnr('$')==1 || winnr('#')!=winnr()) ?
-      \ '['.(&filetype!=''?&filetype.',':'')"
-      \ . ".(&fenc!=''?&fenc:&enc).','.&ff.']' : ''}"
-      \ . "[%4l/%4L,%3c] (%3p%%)"
+let &statusline=''
+    \ . "%{(&filetype=='vimfiler') ?
+        \ vimfiler#get_status_string()
+    \ :
+        \ '['.winnr().'/'.winnr('$').(winnr('#')==winnr()?'#':'').'] '
+        \ . (expand('%:h')!=''?expand('%:h').'/':'').expand('%:t').(&mod?' [+]':' ').(&ro?'[RO]':'')
+    \ }"
+    \ . "%="
+    \ . "%{(&filetype=='vimfiler') ?
+        \ line('.').'/'.line('$')
+    \ :
+        \ ((winnr('$')==1 || winnr('#')!=winnr()) ?
+            \ '['.(&filetype!=''?&filetype.',':'').(&fenc!=''?&fenc:&enc).','.&ff.']'
+        \ :
+            \ '')
+        \ . ' [ '.line('.').'/ '.line('$').', '.col('.').']'
+        \ . ' ('.(line('.')*100/line('$')).'%)'
+    \ }"
 
 " Turn down a long line appointed in 'breakat'
 "set linebreak
