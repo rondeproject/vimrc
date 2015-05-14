@@ -93,6 +93,7 @@ let &statusline=''
         \ . ' [ '.line('.').'/ '.line('$').', '.col('.').']'
         \ . ' ('.(line('.')*100/line('$')).'%)'
     \ }"
+    \ . "|"
 
 " Turn down a long line appointed in 'breakat'
 "set linebreak
