@@ -22,11 +22,5 @@ function cd()
 	builtin cd "$@" && settitle `builtin pwd`
 }
 
-function pwd()
-{
-	settitle `builtin pwd`
-	builtin pwd "$@"
-}
-
 settitle `builtin pwd`
 

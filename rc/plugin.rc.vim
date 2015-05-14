@@ -18,7 +18,7 @@ endif "}}}
 if neobundle#tap("nerdtree") "{{{
 	let NERDTreeShowHidden = 1
 	nnoremap <silent> <C-e> :NERDTreeToggle<CR>
-	autocmd VimEnter * execute 'NERDTree'
+	autocmd MyAutoCmd VimEnter * execute 'NERDTree'
 endif "}}}
 
 
@@ -37,15 +37,17 @@ if neobundle#tap("unite.vim") "{{{
 	" command
 	nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
 	nnoremap <silent> [unite]f :<C-u>Unite file<CR>
-	nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search-buffer -no-quit<CR>
+	nnoremap <silent> [unite]G :<C-u>Unite grep:. -buffer-name=search-buffer -no-quit<CR>
+	nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
 	nnoremap <silent> [unite]F :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 	nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
 	nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
 	nnoremap <silent> [unite]w :<C-u>Unite window<CR>
-	autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-	autocmd FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-	autocmd FileType unite nnoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
-	autocmd FileType unite inoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
+	autocmd MyAutoCmd FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+	autocmd MyAutoCmd FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+	autocmd MyAutoCmd FileType unite nnoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
+	autocmd MyAutoCmd FileType unite inoremap <silent> <buffer> <expr> <C-k> unite#do_action('vsplit')
+	autocmd MyAutoCmd FileType unite inoremap <silent> <buffer> <expr> <C-CR> unite#do_action('persist_open')
 endif "}}}
 
 
@@ -56,14 +58,15 @@ if neobundle#tap("vimfiler") "{{{
 	let g:vimfiler_force_overwrite_statusline = 0
 	nnoremap <silent> <C-e> :VimFilerExplorer<CR>
 
-	augroup vimfiler
-		autocmd!
+	augroup MyAutoCmd
 		" オープンは、<CR>(enter キー)
 		autocmd FileType vimfiler nmap <buffer><expr> <CR>
 					\ vimfiler#smart_cursor_map("\<Plug>(vimfiler_smart_l)", "\<Plug>(vimfiler_edit_file)")
 		" 親ディレクトリ移動
 		autocmd FileType vimfiler nmap <buffer><expr> <BS>
 					\ '<Plug>(vimfiler_smart_h)'
+"		" カレントディレクトリ移動
+"		autocmd FileType vimfiler nmap <silent> <C-c> :<C-u>Unite -default-action=lcd directory_mru<CR>
 	augroup END
 endif "}}}
 
@@ -95,11 +98,11 @@ endif "}}}
 if neobundle#tap("unite-tag") "{{{
 "	let g:unite_source_tag_max_name_length=50
 	let g:unite_source_tag_max_fname_length=50
-	autocmd BufEnter *
+	autocmd MyAutoCmd BufEnter *
 			\   if empty(&buftype)
 			\|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include<CR>
 			\|  endif
-	autocmd BufEnter *
+	autocmd MyAutoCmd BufEnter *
 			\   if empty(&buftype)
 			\|      nnoremap <buffer> <C-t> :<C-u>Unite jump<CR>
 			\|  endif
