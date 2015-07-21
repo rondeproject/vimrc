@@ -18,9 +18,7 @@ set runtimepath+=$CACHE/bundle/neobundle.vim/
 " Required:
 call neobundle#begin(expand('$CACHE/bundle/'))
  
-if neobundle#has_fresh_cache(expand('$HOME/.vim/.vimrc'))
-	NeoBundleLoadCache
-else
+if neobundle#load_cache()
 	" neobundle自体をneobundleで管理
 	NeoBundleFetch 'Shougo/neobundle.vim'
 
