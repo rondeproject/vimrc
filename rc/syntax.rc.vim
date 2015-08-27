@@ -31,3 +31,7 @@ highlight DiffText   ctermfg=black ctermbg=7
 autocmd MyAutoCmd BufRead,BufNewFile makefile.inc set filetype=make
 autocmd MyAutoCmd BufRead,BufNewFile Makefile.inc set filetype=make
 
+" Device Tree
+au BufNewFile,BufRead *.dts setf dts
+au BufNewFile,BufRead *.dtsi setf dts
+
