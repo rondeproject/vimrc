@@ -26,5 +26,5 @@ hi def link dtsLabel            Label
 hi def link dtsNode             Structure
 hi def link dtsReference        Macro
 hi def link dtsComment          Comment
-hi def link dtsCommentInner     Comment 
+hi def link dtsCommentInner     Comment
 hi def link dtsCommentLine      Comment

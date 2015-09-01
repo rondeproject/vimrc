@@ -32,6 +32,6 @@ autocmd MyAutoCmd BufRead,BufNewFile makefile.inc set filetype=make
 autocmd MyAutoCmd BufRead,BufNewFile Makefile.inc set filetype=make
 
 " Device Tree
-au BufNewFile,BufRead *.dts setf dts
-au BufNewFile,BufRead *.dtsi setf dts
+autocmd MyAutoCmd BufRead,BufNewFile *.dts setf dts
+autocmd MyAutoCmd BufRead,BufNewFile *.dtsi setf dts
 
