@@ -26,57 +26,57 @@ if neobundle#load_cache()
 	NeoBundle 'vim-jp/vimdoc-ja'
 
 	" NERDTree
-	"NeoBundle 'scrooloose/nerdtree'
-	NeoBundle 'scrooloose/nerdcommenter'
+"	NeoBundleLazy 'scrooloose/nerdtree'
+	NeoBundleLazy 'scrooloose/nerdcommenter'
 
 	" Grep
-	NeoBundle 'grep.vim'
-	NeoBundle 'rking/ag.vim'
+"	NeoBundle 'grep.vim'
+"	NeoBundle 'rking/ag.vim'
 
 	" vimproc
-	NeoBundle 'Shougo/vimproc',
-				\ { 'build' : {
-				\     'cygwin' : 'make -f make_cygwin.mak',
-				\     'linux' : 'make -f make_unix.mak',
-				\ },
+	NeoBundle 'Shougo/vimproc', {
+				\  'build' : {
+				\    'cygwin' : 'make -f make_cygwin.mak',
+				\    'linux' : 'make -f make_unix.mak',
+				\  }
 				\}
+
+	" Unite
+	NeoBundleLazy 'Shougo/unite.vim'
+	NeoBundleLazy 'Shougo/neomru.vim', { 'depends' : [ 'Shougo/unite.vim' ] }
+	NeoBundleLazy 'ujihisa/unite-colorscheme', { 'depends' : [ 'Shougo/unite.vim' ] }
+
+	" QuickRun
+	NeoBundleLazy 'thinca/vim-quickrun'
+
+	" Filer
+	NeoBundleLazy 'Shougo/vimfiler', { 'depends' : [ 'Shougo/unite.vim' ] }
+
+	" FuzzyFinder
+"	NeoBundle 'L9'
+"	NeoBundle 'FuzzyFinder'
+"	NeoBundle 'QuickBuf'
+
+	" Capture
+	NeoBundleLazy 'tyru/capture.vim'
+
+	" Gundo
+	NeoBundleLazy 'sjl/gundo.vim'
+
+	" VimCalc
+	NeoBundleLazy 'gregsexton/VimCalc'
+
+	" Tag
+	NeoBundleLazy "tsukkee/unite-tag", { 'depends' : [ 'Shougo/unite.vim' ] }
 
 	" vim-submode
 	NeoBundle 'kana/vim-submode'
 
-	" QuickRun
-	NeoBundle 'thinca/vim-quickrun'
-
-	" Unite
-	NeoBundle 'Shougo/unite.vim'
-	NeoBundle 'Shougo/neomru.vim'
-	NeoBundle 'ujihisa/unite-colorscheme'
-
-	" Filer
-	NeoBundle 'Shougo/vimfiler'
-
-	" FuzzyFinder
-	NeoBundle 'L9'
-	NeoBundle 'FuzzyFinder'
-	NeoBundle 'QuickBuf'
-
-	" Capture
-	NeoBundle 'tyru/capture.vim'
-
-	" Gundo
-	NeoBundle 'sjl/gundo.vim'
-
-	" VimCalc
-	NeoBundle 'gregsexton/VimCalc'
-
-	" Tag
-	NeoBundle "tsukkee/unite-tag"
-
 	" SVN
-	NeoBundle "kmnk/vim-unite-svn"
+	NeoBundleLazy "kmnk/vim-unite-svn", { 'depends' : [ 'Shougo/unite.vim' ] }
 
 	" GIT
-	NeoBundle 'kmnk/vim-unite-giti.git'
+	NeoBundleLazy 'kmnk/vim-unite-giti.git', { 'depends' : [ 'Shougo/unite.vim' ] }
 
 	" ColorScheme
 	NeoBundle "w0ng/vim-hybrid"
@@ -86,17 +86,13 @@ if neobundle#load_cache()
 	NeoBundle "ShowMarks"
 
 	" BlockDiff
-	NeoBundle "BlockDiff"
+	NeoBundleLazy "adie/BlockDiff"
 
 	" Cacheの保存
 	NeoBundleSaveCache
 endif
 
 call neobundle#end()
- 
-" 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
-" 毎回聞かれると邪魔な場合もあるので、この設定は任意です。
-"NeoBundleCheck
 
 
 "---------------------------------------------------------------------------
