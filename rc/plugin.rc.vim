@@ -234,10 +234,10 @@ endif "}}}
 let g:y2r_config = {
 			\   'tmp_file': '/tmp/exchange_file',
 			\   'key_file': expand('$HOME') . '/.exchange.key',
-			\   'host': 'localhost',
-			\   'port': 52224,
+			\   'host'    : 'localhost',
+			\   'port'    : 52224,
 			\}
-function! s:Yank2Remote()
+function! Yank2Remote()
 	call writefile(split(@", '\n'), g:y2r_config.tmp_file, 'b')
 	let s:params = ['cat %s %s | nc -w1 %s %s']
 	for s:item in ['key_file', 'tmp_file', 'host', 'port']
@@ -246,6 +246,7 @@ function! s:Yank2Remote()
 	let s:ret = system(call(function('printf'), s:params))
 endfunction
 nnoremap <silent> <Leader>y :call Yank2Remote()<CR>
+
 
 
 "" =========================================================================
