@@ -171,16 +171,19 @@ endif "}}}
 "" =========================================================================
 " vim-submode:
 if neobundle#tap("vim-submode") "{{{
-	call submode#enter_with('resizewin', 'n', '', '<C-w>>', '<C-w>>')
-	call submode#enter_with('resizewin', 'n', '', '<C-w><', '<C-w><')
-	call submode#enter_with('resizewin', 'n', '', '<C-w>+', '<C-w>+')
-	call submode#enter_with('resizewin', 'n', '', '<C-w>-', '<C-w>-')
-	call submode#map('resizewin', 'n', '', '>', '<C-w>>')
-	call submode#map('resizewin', 'n', '', '<', '<C-w><')
-	call submode#map('resizewin', 'n', '', '+', '<C-w>+')
-	call submode#map('resizewin', 'n', '', '-', '<C-w>-')
-	nnoremap <silent> <Tab>    <C-w>w
-	nnoremap <silent> <S-Tab>  <C-w>W
+	let s:bundle = neobundle#get("vim-submode")
+	function! s:bundle.hooks.on_source(bundle)
+		call submode#enter_with('resizewin', 'n', '', '<C-w>>', '<C-w>>')
+		call submode#enter_with('resizewin', 'n', '', '<C-w><', '<C-w><')
+		call submode#enter_with('resizewin', 'n', '', '<C-w>+', '<C-w>+')
+		call submode#enter_with('resizewin', 'n', '', '<C-w>-', '<C-w>-')
+		call submode#map('resizewin', 'n', '', '>', '<C-w>>')
+		call submode#map('resizewin', 'n', '', '<', '<C-w><')
+		call submode#map('resizewin', 'n', '', '+', '<C-w>+')
+		call submode#map('resizewin', 'n', '', '-', '<C-w>-')
+		nnoremap <silent> <Tab>    <C-w>w
+		nnoremap <silent> <S-Tab>  <C-w>W
+	endfunction
 	call neobundle#untap()
 endif "}}}
 
