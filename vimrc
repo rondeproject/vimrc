@@ -92,7 +92,6 @@ if neobundle#load_cache()
 	NeoBundleSaveCache
 endif
 
-call neobundle#end()
 
 
 "---------------------------------------------------------------------------
@@ -119,3 +118,4 @@ call s:source_rc('syntax.rc.vim')
 " Plugin:
 call s:source_rc('plugin.rc.vim')
 
+call neobundle#end()
