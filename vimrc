@@ -23,7 +23,7 @@ if neobundle#load_cache()
 	NeoBundleFetch 'Shougo/neobundle.vim'
 
 	" Help for Japanise
-	NeoBundle 'vim-jp/vimdoc-ja'
+	NeoBundleLazy 'vim-jp/vimdoc-ja'
 
 	" NERDTree
 "	NeoBundleLazy 'scrooloose/nerdtree'
