@@ -31,4 +31,15 @@ map <silent> [Tag]w :tabclose<CR>
 map <silent> [Tag]t :tabnext<CR>
 map <silent> [Tag]T :tabprevious<CR>
 
+" バイナリモード
+augroup BinaryXXD
+    autocmd!
+""  autocmd BufReadPre  *.bin let &binary =1
+    autocmd BufReadPost  * if &binary | silent %!xxd -g 1
+    autocmd BufReadPost  * set ft=xxd | endif
+    autocmd BufWritePre  * if &binary | silent %!xxd -r
+    autocmd BufWritePre  * endif
+    autocmd BufWritePost * if &binary | silent %!xxd -g 1
+    autocmd BufWritePost * set nomod | endif
+augroup END
 
